@@ -27,14 +27,28 @@ jobs: # 定义工作流中的所有任务
       - name: Checkout repository # 步骤1：检出代码
         uses: actions/checkout@v4
 
-      - name: Setup Node.js # 步骤2：设置 Node.js 环境
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.17.1' # 指定 Node.js 版本，根据你的项目需要调整
-          cache: 'pnpm' # 可选项：缓存 npm 依赖，加速后续构建
+          node-version: '18.17.1'
+          cache: 'pnpm'
 
-      - name: Install dependencies # 步骤3：安装依赖
-        run: pnpm install # 或使用 npm install
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          PNPM_HOME: "${{ runner.temp }}/.pnpm"
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            **/node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Build project # 步骤4：执行构建命令，生成静态文件
         run: pnpm run build
