@@ -56,7 +56,7 @@ jobs: # 定义工作流中的所有任务
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Build project # 步骤4：执行构建命令，生成静态文件
-        run: pnpm run build
+        run: pnpm run build:doc
 
       - name: Setup Pages # 步骤5：配置 Pages 环境
         uses: actions/configure-pages@v4
