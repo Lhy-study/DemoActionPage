@@ -43,7 +43,7 @@ jobs: # 定义工作流中的所有任务
         env:
           PNPM_HOME: "${{ runner.temp }}/.pnpm"
         shell: bash
-        run: |
+        run: 
           echo "$PNPM_HOME/bin" >> $GITHUB_PATH
           pnpm install --frozen-lockfile
 
