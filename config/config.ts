@@ -1,9 +1,10 @@
 import { menus } from './hooks';
-
+/** 远程仓库的名称 */
+const BaseUrl = '/DemoActionPage/';
 const packages = require('../packages/hooks/package.json');
 // console.log(1123123123213)
 export default {
-  publicPath: '/DemoActionPage/',
+  publicPath:BaseUrl,
   exportStatic: {},
   nodeModulesTransform: {
     type: 'none',
@@ -22,8 +23,8 @@ export default {
   ],
   mode: 'site',
   title: 'encode react hooks',
-  favicon: '/avatar.png',
-  logo: '/logo.png',
+  favicon:BaseUrl + '/avatar.png',
+  logo: BaseUrl + '/logo.png',
   dynamicImport: {},
   manifest: {},
   hash: true,
