@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages # 工作流的名称
+
+on: # 指定触发工作流的事件
+  push: # 当发生推送事件时
+    branches: [ main ] # 仅当推送到 main 分支时触发。可根据需要改为 master 或其他分支
+  workflow_dispatch: # 允许手动在 Actions 标签页触发工作流
+
+# 设置权限，允许写入 Pages 相关资源
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 限制并发，防止多次部署同时进行
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs: # 定义工作流中的所有任务
+  deploy: # 定义一个名为 deploy 的任务
+    environment: # 指定任务运行的环境
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }} # 部署后可以通过这个变量输出访问地址
+    runs-on: ubuntu-latest # 任务运行在最新的 Ubuntu 系统上
+
+    steps: # 定义任务中的所有步骤
+      - name: Checkout repository # 步骤1：检出代码
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js # 步骤2：设置 Node.js 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.17.1' # 指定 Node.js 版本，根据你的项目需要调整
+          cache: 'pnpm' # 可选项：缓存 npm 依赖，加速后续构建
+
+      - name: Install dependencies # 步骤3：安装依赖
+        run: pnpm install # 或使用 npm install
+
+      - name: Build project # 步骤4：执行构建命令，生成静态文件
+        run: pnpm run build
+
+      - name: Setup Pages # 步骤5：配置 Pages 环境
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact # 步骤6：将构建好的静态文件文件夹上传为制品
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # 这里替换为你的静态文件生成路径，例如 'out', 'public', 'docs/.vitepress/dist'
+
+      - name: Deploy to GitHub Pages # 步骤7：部署到 GitHub Pages
+        id: deployment # 给这个步骤一个 ID，便于后续引用输出变量
+        uses: actions/deploy-pages@v4
