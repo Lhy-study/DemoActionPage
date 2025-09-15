@@ -31,7 +31,6 @@ jobs: # 定义工作流中的所有任务
         uses: actions/setup-node@v4
         with:
           node-version: '18.17.1'
-          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
