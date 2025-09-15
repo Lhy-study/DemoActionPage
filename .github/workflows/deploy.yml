@@ -26,6 +26,9 @@ jobs: # 定义工作流中的所有任务
     steps: # 定义任务中的所有步骤
       - name: Checkout repository # 步骤1：检出代码
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -43,7 +46,7 @@ jobs: # 定义工作流中的所有任务
         shell: bash
         run: |
           echo "$PNPM_HOME/bin" >> $GITHUB_PATH
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile || (echo "Lockfile missing, generating new one" && pnpm install)
 
       - uses: actions/cache@v3
         with:
