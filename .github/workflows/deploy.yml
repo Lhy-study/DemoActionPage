@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages # 工作流的名称
 
 on: # 指定触发工作流的事件
   push: # 当发生推送事件时
-    branches: [ main ] # 仅当推送到 main 分支时触发。可根据需要改为 master 或其他分支
+    branches: [ master ] # 仅当推送到 main 分支时触发。可根据需要改为 master 或其他分支
   workflow_dispatch: # 允许手动在 Actions 标签页触发工作流
 
 # 设置权限，允许写入 Pages 相关资源
@@ -39,11 +39,10 @@ jobs: # 定义工作流中的所有任务
           version: 8
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
         env:
           PNPM_HOME: "${{ runner.temp }}/.pnpm"
         shell: bash
-        run: 
+        run: |
           echo "$PNPM_HOME/bin" >> $GITHUB_PATH
           pnpm install --frozen-lockfile
 
