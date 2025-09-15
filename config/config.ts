@@ -1,8 +1,9 @@
 import { menus } from './hooks';
 
 const packages = require('../packages/hooks/package.json');
-
+// console.log(1123123123213)
 export default {
+  publicPath: '/DemoActionPage/',
   exportStatic: {},
   nodeModulesTransform: {
     type: 'none',
